@@ -2,7 +2,6 @@ package dao
 
 import (
 	"Q-A/model"
-
 	"errors"
 )
 

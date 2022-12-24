@@ -49,6 +49,7 @@ func deleteAnswer(ctx *gin.Context) {
 		tool.RespErrorWithData(ctx, "answer_id格式有误")
 		return
 	}
+
 	err = service.DeleteAnswer(AnswerId)
 	if err != nil {
 		if err == dao.ErrAnswerNotExist {

@@ -3,6 +3,7 @@ package service
 import (
 	"Q-A/dao"
 	"Q-A/model"
+	"database/sql"
 )
 
 func AddQuestion(Question model.Question) error {
@@ -40,4 +41,19 @@ func Like(QuestionId int) error {
 
 func CancelLike(QuestionId int) error {
 	return dao.DeleteLike(QuestionId)
+}
+
+func CheckQuestionExist(QuestionId int) (bool, error) {
+	flag, err := dao.CheckQuestionExist(QuestionId)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return false, nil
+		}
+		return false, err
+	}
+	return flag, nil
+}
+
+func CheckQuestionAuthor(QuestionId int, username string) (bool, error) {
+	return dao.CheckQuestionAuthor(QuestionId, username)
 }

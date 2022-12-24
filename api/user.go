@@ -29,14 +29,12 @@ func changePassword(ctx *gin.Context) {
 		tool.RespInternalError(ctx)
 		return
 	}
-
 	if !flag {
 		tool.RespErrorWithData(ctx, "用户名不存在")
 		return
 	}
 
 	//检验旧密码是否正确
-
 	if flag, err := service.IsPasswordCorrect(username, oldPassword); err != nil {
 		fmt.Println("judge password correct err:", err)
 		tool.RespInternalError(ctx)
@@ -67,18 +65,19 @@ func login(ctx *gin.Context) {
 		return
 	}
 
+	//检查用户名是否存在
 	flag, err := service.IsRepeatUsername(u.Username)
 	if err != nil {
 		fmt.Println("judge repeat username err:", err)
 		tool.RespInternalError(ctx)
 		return
 	}
-
 	if !flag {
 		tool.RespErrorWithData(ctx, "用户名不存在")
 		return
 	}
 
+	//检验密码是否正确
 	flag, err = service.IsPasswordCorrect(u.Username, u.Password)
 	if err != nil {
 		fmt.Println("judge password correct err:", err)
@@ -107,13 +106,13 @@ func register(ctx *gin.Context) {
 		Username: u.Username,
 		Password: u.Password,
 	}
+	//检验用户名是否存在
 	flag, err := service.IsRepeatUsername(u.Username)
 	if err != nil {
 		fmt.Println("judge repeat username err:", err)
 		tool.RespInternalError(ctx)
 		return
 	}
-
 	if flag {
 		tool.RespErrorWithData(ctx, "用户名已存在")
 		return
@@ -138,19 +137,18 @@ func delUser(ctx *gin.Context) {
 		tool.RespErrorWithData(ctx, err.Error())
 		return
 	}
-
+	//检验用户名是否存在
 	flag, err := service.IsRepeatUsername(u.Username)
 	if err != nil {
 		fmt.Println("judge repeat username err:", err)
 		tool.RespInternalError(ctx)
 		return
 	}
-
 	if !flag {
 		tool.RespErrorWithData(ctx, "用户名不存在")
 		return
 	}
-
+	//检验密码是否正确
 	flag, err = service.IsPasswordCorrect(u.Username, u.Password)
 	if err != nil {
 		fmt.Println("judge password correct err:", err)
@@ -167,7 +165,6 @@ func delUser(ctx *gin.Context) {
 		tool.RespErrorWithData(ctx, "删除失败")
 		return
 	}
-
 	ctx.SetCookie("username", u.Username, 700, "/", "", false, false)
 	tool.RespSuccessfulWithData(ctx, "删除成功")
 }
